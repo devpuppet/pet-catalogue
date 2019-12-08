@@ -6,10 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = {
-//		"com.kkukielka.petcatalogueweb.bootstrap",
-//		"com.kkukielka.petcatalogueweb.controller",
-//		"com.kkukielka.petcatalogueweb.service"
-		"com.kkukielka.petcatalogueweb"
+		"com.kkukielka.petcatalogueweb",
 })
 @EnableJpaRepositories("com.kkukielka.petcataloguemodel")
 @EntityScan("com.kkukielka.petcataloguemodel.model")

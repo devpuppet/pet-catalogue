@@ -27,7 +27,7 @@ class PetServiceImplTest {
     }
 
     @Test
-    void getPets() {
+    public void getPets() {
 
         // given
         Pet pet1 = Pet.builder().name("Test1").build();
@@ -50,7 +50,7 @@ class PetServiceImplTest {
     }
 
     @Test
-    void savePet() {
+    public void saveValidPet() {
 
         // given
         String petName = "Test";
@@ -68,4 +68,13 @@ class PetServiceImplTest {
         verify(petRepository, times(1)).save(any(Pet.class));
 
     }
+
+    @Test
+    public void saveNullPet() {
+        Pet pet = null;
+
+        Assertions.assertThrows(RuntimeException.class, () -> petService.savePet(pet));
+        verify(petRepository, times(0)).save(any(Pet.class));
+    }
+
 }
