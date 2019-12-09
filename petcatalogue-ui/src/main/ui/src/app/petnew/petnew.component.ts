@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PetService } from 'src/service/pet-service.service';
+import { Pet } from 'src/model/pet';
 
 @Component({
   selector: 'app-petnew',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PetnewComponent implements OnInit {
 
-  constructor() { }
+  pet: Pet;
+
+  constructor(private petService: PetService) { 
+    this.pet = new Pet();
+  }
 
   ngOnInit() {
+  }
+
+  onSubmit() {
+    this.petService.savePet(this.pet);
   }
 
 }

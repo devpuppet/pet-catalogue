@@ -7,6 +7,7 @@ import { PetlistComponent } from './petlist/petlist.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PetService } from 'src/service/pet-service.service';
 import { PetnewComponent } from './petnew/petnew.component';
+import { FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { PetnewComponent } from './petnew/petnew.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [PetService],
   bootstrap: [AppComponent]
