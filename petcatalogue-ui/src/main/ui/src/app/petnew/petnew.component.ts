@@ -10,16 +10,22 @@ import { Pet } from 'src/model/pet';
 export class PetnewComponent implements OnInit {
 
   pet: Pet;
+  isPetSaved: boolean;
 
   constructor(private petService: PetService) { 
     this.pet = new Pet();
+    this.isPetSaved = false;
   }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    this.petService.savePet(this.pet);
+    this.petService.savePet(this.pet).subscribe(result => {
+      if (result.id !== null) {
+        this.isPetSaved = true;
+      } 
+    });
   }
 
 }

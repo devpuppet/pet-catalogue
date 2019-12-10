@@ -18,7 +18,7 @@ public findAll(): Observable<Pet[]> {
   return this.http.get<Pet[]>(this.findAllUrl);
   }
 
-public savePet(pet: Pet) {
+public savePet(pet: Pet): Observable<Pet> {
   return this.http.post<Pet>(this.savePetUrl, pet);
 } 
 

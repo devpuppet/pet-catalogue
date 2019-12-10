@@ -1,20 +1,27 @@
 <div class="card my-5">
     <div class="card-body">
-        <form (ngSubmit)="onSubmit()" #petForm="ngForm">
+        <form (ngSubmit)="onSubmit(); petForm.reset()" #petForm="ngForm">
             <div class="form-group">
                 <div class="form-group">
-                    <label>Name</label>
+                    <label for="name">Name</label>
                     <input class="form-control" 
-                    type="text" 
-                    placeholder="name"
-                    id="name" 
-                    name="test" 
-                    [(ngModel)]="pet.name" 
-                    required #name="ngModel">
+                           type="text"
+                           placeholder="name"
+                           id="name"
+                           name="name"
+                           [(ngModel)]="pet.name"
+                           required
+                           #name="ngModel">
                     <small>Enter your cute pet's name :)</small>
+                    <div class="alert alert-danger"
+                         [hidden]="name.valid || name.pristine || name.untouched">Name is required</div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-info">Submit</button>
+            <button type="submit" 
+                    class="btn btn-info"
+                    [disabled]="!petForm.form.valid">Submit</button>
+            <div class="alert alert-success"
+                 [hidden]="!isPetSaved || petForm.dirty">Pet Successfully saved</div>
         </form>
     </div>
 </div>
