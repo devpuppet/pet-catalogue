@@ -8,14 +8,18 @@ import { Pet } from 'src/model/pet';
 })
 export class PetService {
 
-  privateuserUrl: string;
+  findAllUrl = 'http://localhost:8080/pets';
+  savePetUrl = 'http://localhost:8080/pet/new';
 
   constructor(private http: HttpClient) { 
-    this.privateuserUrl = 'http://localhost:8080/pets';
   }
 
 public findAll(): Observable<Pet[]> {
-  return this.http.get<Pet[]>(this.privateuserUrl);
+  return this.http.get<Pet[]>(this.findAllUrl);
   }
+
+public savePet(pet: Pet): Observable<Pet> {
+  return this.http.post<Pet>(this.savePetUrl, pet);
+} 
 
 }

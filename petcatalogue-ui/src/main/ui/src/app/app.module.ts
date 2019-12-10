@@ -6,16 +6,20 @@ import { AppComponent } from './app.component';
 import { PetlistComponent } from './petlist/petlist.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PetService } from 'src/service/pet-service.service';
+import { PetnewComponent } from './petnew/petnew.component';
+import { FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PetlistComponent
+    PetlistComponent,
+    PetnewComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [PetService],
   bootstrap: [AppComponent]
