@@ -9,8 +9,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Owner {
 
     @Id
@@ -18,6 +20,7 @@ public class Owner {
     private Long id;
     private String name;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "owner")
     private Set<Pet> pets = new HashSet<>();
 

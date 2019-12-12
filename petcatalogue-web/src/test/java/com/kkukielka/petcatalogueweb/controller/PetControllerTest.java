@@ -1,6 +1,11 @@
 package com.kkukielka.petcatalogueweb.controller;
 
+import com.kkukielka.petcataloguemodel.model.Owner;
 import com.kkukielka.petcataloguemodel.model.Pet;
+import com.kkukielka.petcatalogueweb.dto.OwnerDto;
+import com.kkukielka.petcatalogueweb.dto.PetDto;
+import com.kkukielka.petcatalogueweb.mapper.OwnerMapper;
+import com.kkukielka.petcatalogueweb.mapper.PetMapper;
 import com.kkukielka.petcatalogueweb.service.PetService;
 import com.kkukielka.petcatalogueweb.util.GsonHelper;
 import org.junit.jupiter.api.Assertions;
@@ -16,13 +21,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class PetControllerTest {
 
     @Mock
     private PetService petService;
+
+    private PetMapper petMapper = new PetMapper();
+
+    private OwnerMapper ownerMapper = new OwnerMapper();
 
     private PetController petController;
 
@@ -33,7 +41,7 @@ class PetControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        petController = new PetController(petService);
+        petController = new PetController(petService, petMapper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(petController).build();
     }
@@ -51,9 +59,17 @@ class PetControllerTest {
     @Test
     void savePet() throws Exception {
         // given
-        String petName = "test";
-        Pet petToSave = Pet.builder().name(petName).build();
-        Pet returnPet = Pet.builder().id(1L).name(petName).build();
+        String ownerName = "Mike";
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setName(ownerName);
+        Owner owner = ownerMapper.convertToEntity(ownerDto);
+
+        String petName = "Scooby";
+        PetDto petDto = new PetDto();
+        petDto.setOwner(ownerDto);
+        petDto.setName(petName);
+
+        Pet returnPet = Pet.builder().id(1L).name(petName).owner(owner).build();
 
         when(petService.savePet(any(Pet.class))).thenReturn(returnPet);
 
@@ -62,9 +78,8 @@ class PetControllerTest {
                 .perform(post("/pet/new")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
-                    .content(gsonHelper.toJson(petToSave))
+                    .content(gsonHelper.toJson(petDto))
                 )
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
