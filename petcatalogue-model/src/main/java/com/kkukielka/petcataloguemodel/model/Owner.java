@@ -3,22 +3,27 @@ package com.kkukielka.petcataloguemodel.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pet {
+public class Owner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    @JoinColumn(name = "owner_id")
-    private Owner owner;
+    @OneToMany(mappedBy = "owner")
+    private Set<Pet> pets = new HashSet<>();
+
+    public void addPet(Pet pet) {
+        pet.setOwner(this);
+        this.pets.add(pet);
+    }
 
 }
