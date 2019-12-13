@@ -5,15 +5,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PetlistComponent } from './petlist/petlist.component';
 import { HttpClientModule } from '@angular/common/http';
-import { PetService } from 'src/service/pet-service.service';
+import { PetService } from 'src/service/petservice/pet-service.service';
 import { PetnewComponent } from './petnew/petnew.component';
 import { FormsModule} from '@angular/forms';
+import { OwnernewComponent } from './ownernew/ownernew.component';
+import { OwnerService } from 'src/service/ownerservice/ownerservice.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     PetlistComponent,
-    PetnewComponent
+    PetnewComponent,
+    OwnernewComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +24,7 @@ import { FormsModule} from '@angular/forms';
     HttpClientModule,
     FormsModule
   ],
-  providers: [PetService],
+  providers: [PetService, OwnerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
