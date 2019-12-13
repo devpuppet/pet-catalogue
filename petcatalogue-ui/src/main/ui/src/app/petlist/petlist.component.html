@@ -5,12 +5,14 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Owner</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let pet of pets">
                     <td>{{ pet.id }}</td>
                     <td>{{ pet.name }}</td>
+                    <td>{{ pet.owner.name }}</td>
                 </tr>
             </tbody>
         </table>
