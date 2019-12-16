@@ -2,12 +2,11 @@ package com.kkukielka.petcatalogueweb.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkukielka.petcataloguemodel.model.Owner;
-import com.kkukielka.petcataloguemodel.model.Pet;
 import com.kkukielka.petcatalogueweb.dto.OwnerDto;
 import com.kkukielka.petcatalogueweb.dto.PetDto;
 import com.kkukielka.petcatalogueweb.mapper.OwnerMapper;
 import com.kkukielka.petcatalogueweb.mapper.PetMapper;
-import com.kkukielka.petcatalogueweb.service.PetService;
+import com.kkukielka.petcatalogueweb.service.OwnerService;
 import com.kkukielka.petcatalogueweb.view.Views;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,83 +21,70 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class PetControllerTest {
 
-    @Mock
-    private PetService petService;
+class OwnerControllerTest {
+
+    private MockMvc mockMvc;
+
+    private OwnerController ownerController;
 
     private PetMapper petMapper = new PetMapper();
 
     private OwnerMapper ownerMapper = new OwnerMapper(petMapper);
 
-    private PetController petController;
-
-    private MockMvc mockMvc;
-
     private ObjectMapper objectMapper = new ObjectMapper();
+
+    @Mock
+    private OwnerService ownerService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        petController = new PetController(petService, petMapper);
-
-        mockMvc = MockMvcBuilders.standaloneSetup(petController).build();
+        ownerController = new OwnerController(ownerService, ownerMapper);
+        mockMvc = MockMvcBuilders.standaloneSetup(ownerController).build();
     }
 
     @Test
-    void getPets() throws Exception {
-
-        mockMvc.perform(get("/pets"))
-                .andExpect(status().isOk());
-
-        verify(petService, times(1)).getPets();
-
-    }
-
-    @Test
-    void savePet() throws Exception {
+    void saveOwner() throws Exception {
         // given
         String ownerName = "Mike";
+        String petName = "Scooby";
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setName(ownerName);
-        Owner owner = ownerMapper.convertToEntity(ownerDto);
-        owner.setId(1L);
 
-        String petName = "Scooby";
         PetDto petDto = new PetDto();
-        petDto.setOwner(ownerDto);
         petDto.setName(petName);
+        petDto.setOwner(ownerDto);
         ownerDto.setPets(Stream.of(petDto).collect(Collectors.toSet()));
 
-        Pet expectedPet = Pet.builder().id(1L).name(petName).owner(owner).build();
-        owner.addPet(expectedPet);
+        Owner expectedOwner = ownerMapper.convertToEntity(ownerDto);
+        expectedOwner.setId(1L);
 
-        when(petService.savePet(any(Pet.class))).thenReturn(expectedPet);
-        String requestString = objectMapper.writerWithView(Views.Pet.class).writeValueAsString(petDto);
+        when(ownerService.saveOwner(any(Owner.class))).thenReturn(expectedOwner);
+
+        String requestString = objectMapper.writerWithView(Views.Owner.class).writeValueAsString(ownerDto);
 
         // when
-        MockHttpServletResponse response = mockMvc
-                .perform(post("/pet/new")
+        MockHttpServletResponse response = mockMvc.perform(
+                post("/owner/new")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .characterEncoding("utf-8")
                     .content(requestString)
-                )
+                    .characterEncoding("utf-8"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
         String responseString = response.getContentAsString();
 
-        PetDto savedPetDto = objectMapper.readValue(responseString, PetDto.class);
-        Pet savedPet = petMapper.convertToEntity(savedPetDto);
+        OwnerDto savedOwnerDto = objectMapper.readValue(responseString, OwnerDto.class);
+        Owner savedOwner = ownerMapper.convertToEntity(savedOwnerDto);
 
         // then
-        Assertions.assertEquals(expectedPet, savedPet);
-        verify(petService, times(1)).savePet(any(Pet.class));
-
+        Assertions.assertEquals(expectedOwner, savedOwner);
+        verify(ownerService, times(1)).saveOwner(any(Owner.class));
     }
 }

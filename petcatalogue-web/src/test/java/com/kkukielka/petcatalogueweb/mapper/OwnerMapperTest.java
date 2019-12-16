@@ -6,9 +6,13 @@ import com.kkukielka.petcatalogueweb.dto.OwnerDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Collectors;
+
 class OwnerMapperTest {
 
-    private OwnerMapper ownerMapper = new OwnerMapper();
+    private PetMapper petMapper = new PetMapper();
+
+    private OwnerMapper ownerMapper = new OwnerMapper(petMapper);
 
     @Test
     void convertToDto() {
@@ -20,6 +24,10 @@ class OwnerMapperTest {
         OwnerDto ownerDto = ownerMapper.convertToDto(owner);
         Assertions.assertEquals(owner.getId(), ownerDto.getId());
         Assertions.assertEquals(owner.getName(), ownerDto.getName());
+        Assertions.assertEquals(owner.getPets(), ownerDto.getPets()
+                .stream()
+                .map(petMapper::convertToEntity)
+                .collect(Collectors.toSet()));
     }
 
     @Test

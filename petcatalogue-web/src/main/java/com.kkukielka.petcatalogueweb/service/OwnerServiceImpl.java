@@ -3,6 +3,7 @@ package com.kkukielka.petcatalogueweb.service;
 import com.kkukielka.petcataloguemodel.model.Owner;
 import com.kkukielka.petcataloguemodel.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OwnerServiceImpl implements OwnerService {
@@ -14,6 +15,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
+    @Transactional
     public Owner saveOwner(Owner owner) {
 
         if (owner == null) {

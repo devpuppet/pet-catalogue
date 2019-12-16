@@ -1,9 +1,11 @@
 package com.kkukielka.petcatalogueweb.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.kkukielka.petcataloguemodel.model.Owner;
 import com.kkukielka.petcatalogueweb.dto.OwnerDto;
 import com.kkukielka.petcatalogueweb.mapper.OwnerMapper;
 import com.kkukielka.petcatalogueweb.service.OwnerService;
+import com.kkukielka.petcatalogueweb.view.Views;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +21,7 @@ public class OwnerController {
         this.ownerMapper = ownerMapper;
     }
 
+    @JsonView(Views.Owner.class)
     @PostMapping("/owner/new")
     public OwnerDto saveOwner(@RequestBody OwnerDto ownerDto) {
         Owner owner = ownerMapper.convertToEntity(ownerDto);

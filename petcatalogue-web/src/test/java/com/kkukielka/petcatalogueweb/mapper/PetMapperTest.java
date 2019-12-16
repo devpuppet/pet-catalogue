@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class PetMapperTest {
 
     private PetMapper petMapper = new PetMapper();
-    private OwnerMapper ownerMapper = new OwnerMapper();
+    private OwnerMapper ownerMapper = new OwnerMapper(petMapper);
 
     @Test
     void convertToDto() {

@@ -21,7 +21,7 @@ public class Owner {
     private String name;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<Pet> pets = new HashSet<>();
 
     public void addPet(Pet pet) {

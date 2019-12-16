@@ -1,9 +1,11 @@
 package com.kkukielka.petcatalogueweb.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.kkukielka.petcataloguemodel.model.Pet;
 import com.kkukielka.petcatalogueweb.dto.PetDto;
 import com.kkukielka.petcatalogueweb.mapper.PetMapper;
 import com.kkukielka.petcatalogueweb.service.PetService;
+import com.kkukielka.petcatalogueweb.view.Views;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,7 @@ public class PetController {
         this.petMapper = petMapper;
     }
 
+    @JsonView(Views.Pet.class)
     @GetMapping("/pets")
     public List<PetDto> getPets() {
         List<Pet> pets = petService.getPets();
@@ -35,6 +38,7 @@ public class PetController {
         return petsDto;
     }
 
+    @JsonView(Views.Pet.class)
     @PostMapping("/pet/new")
     public PetDto savePet(@RequestBody PetDto petDto) {
         Pet pet = petMapper.convertToEntity(petDto);
