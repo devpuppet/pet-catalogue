@@ -18,11 +18,15 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,6 +51,33 @@ class OwnerControllerTest {
         MockitoAnnotations.initMocks(this);
         ownerController = new OwnerController(ownerService, ownerMapper);
         mockMvc = MockMvcBuilders.standaloneSetup(ownerController).build();
+    }
+
+    @Test
+    void getOwners() throws Exception {
+        // given
+        List<Owner> expectedOwners = new ArrayList<>();
+        Owner owner = new Owner();
+        owner.setId(1L);
+        expectedOwners.add(owner);
+
+        when(ownerService.getOwners()).thenReturn(expectedOwners);
+
+        // when
+        MockHttpServletResponse response = mockMvc.perform(get("/owners"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        String responseString = response.getContentAsString();
+        List<OwnerDto> returnOwnersDto = Arrays.asList(
+                objectMapper.readValue(responseString, OwnerDto[].class));
+
+        List<Owner> returnOwners = returnOwnersDto.stream()
+                .map(o -> ownerMapper.convertToEntity(o))
+                .collect(Collectors.toList());
+
+        // then
+        Assertions.assertEquals(expectedOwners, returnOwners);
     }
 
     @Test

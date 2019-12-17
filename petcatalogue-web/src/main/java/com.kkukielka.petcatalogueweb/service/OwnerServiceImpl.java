@@ -5,6 +5,8 @@ import com.kkukielka.petcataloguemodel.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class OwnerServiceImpl implements OwnerService {
 
@@ -12,6 +14,11 @@ public class OwnerServiceImpl implements OwnerService {
 
     public OwnerServiceImpl(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
+    }
+
+    @Override
+    public List<Owner> getOwners() {
+        return ownerRepository.findAll();
     }
 
     @Override

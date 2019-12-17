@@ -6,9 +6,13 @@ import com.kkukielka.petcatalogueweb.dto.OwnerDto;
 import com.kkukielka.petcatalogueweb.mapper.OwnerMapper;
 import com.kkukielka.petcatalogueweb.service.OwnerService;
 import com.kkukielka.petcatalogueweb.view.Views;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class OwnerController {
@@ -19,6 +23,17 @@ public class OwnerController {
     public OwnerController(OwnerService ownerService, OwnerMapper ownerMapper) {
         this.ownerService = ownerService;
         this.ownerMapper = ownerMapper;
+    }
+
+    @JsonView(Views.Owner.class)
+    @GetMapping("/owners")
+    public List<OwnerDto> getOwners() {
+        List<Owner> owners = ownerService.getOwners();
+        List<OwnerDto> ownersDto = owners.stream()
+                .map(owner -> ownerMapper.convertToDto(owner))
+                .collect(Collectors.toList());
+
+        return ownersDto;
     }
 
     @JsonView(Views.Owner.class)
