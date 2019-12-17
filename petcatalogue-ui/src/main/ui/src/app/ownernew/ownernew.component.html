@@ -1,0 +1,27 @@
+<div class="card my-5">
+        <div class="card-body">
+            <form (ngSubmit)="onSubmit(); ownerForm.reset()" #ownerForm="ngForm">
+                <div class="form-group">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input class="form-control" 
+                               type="text"
+                               placeholder="name"
+                               id="name"
+                               name="name"
+                               [(ngModel)]="owner.name"
+                               required
+                               #name="ngModel">
+                        <div class="alert alert-danger"
+                             [hidden]="name.valid || name.pristine || name.untouched">Name is required</div>
+                    </div>
+                </div>
+                <button type="submit" 
+                        class="btn btn-info"
+                        [disabled]="!ownerForm.form.valid">Submit</button>
+                <div class="alert alert-success"
+                     [hidden]="!isOwnerSaved || ownerForm.dirty">Owner Successfully saved</div>
+            </form>
+        </div>
+    </div>
+    
